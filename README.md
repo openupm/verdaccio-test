@@ -23,6 +23,9 @@ git clone --single-branch --branch openupm git@github.com:favoyang/verdaccio.git
 # Checkout monorepo
 git clone --single-branch --branch monorepo git@github.com:favoyang/monorepo.git
 
+# Checkout verdaccio-storage-proxy
+git clone git@github.com:openupm/verdaccio-storage-proxy.git
+
 # Install npm libs
 npm install
 npm install -g npm-cli-login

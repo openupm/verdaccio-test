@@ -7,7 +7,7 @@ function divider() {
 }
 
 divider
-echo "##### build verdaccio..."
+echo "# build verdaccio..."
 cd "$DIR/verdaccio"
 echo "# clean..."
 git checkout -f openupm
@@ -23,7 +23,7 @@ echo "# yarn npm pack..."
 npm pack
 
 divider
-echo "##### build monorepo..."
+echo "# build aws-s3-storage..."
 cd "$DIR/monorepo"
 echo "# clean..."
 git checkout -f openupm
@@ -39,10 +39,21 @@ echo "# npm run build..."
 npm run build
 echo "# npm pack..."
 npm pack
-echo "##### build monorepo end"
 
 divider
-echo "##### install..."
+echo "# build storage-proxy..."
+cd "$DIR/verdaccio-storage-proxy"
+echo "# clean..."
+rm -f *.tgz
+echo "# npm install..."
+npm install
+echo "# npm run build..."
+npm run build
+echo "# npm pack..."
+npm pack
+
+divider
+echo "# install..."
 cd "$DIR/server"
 echo "# clean..."
 rm -f package-lock.json
@@ -50,4 +61,6 @@ echo "# npm install verdaccio..."
 npm install -f "$DIR"/verdaccio/verdaccio-*.tgz
 echo "# npm install aws-s3-storage..."
 npm install -f "$DIR"/monorepo/plugins/aws-s3-storage/verdaccio-*.tgz
+echo "# npm install verdaccio-storage-proxy..."
+npm install -f "$DIR"/verdaccio-storage-proxy/verdaccio-*.tgz
 divider

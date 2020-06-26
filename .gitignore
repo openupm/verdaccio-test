@@ -111,3 +111,5 @@ node_modules
 monorepo
 verdaccio
 minio-data
+.yo-rc.json
+verdaccio-storage-proxy

@@ -61,15 +61,20 @@ logs:
   - {type: stdout, format: pretty, level: trace}
 
 store:
-  aws-s3-storage:
-    bucket: openupm
-    region: us-east-1
-    endpoint: http://127.0.0.1:9000
-    accessKeyId: admin
-    secretAccessKey: password
-    s3ForcePathStyle: true
-    keyPrefix: 'verdaccio/'
-    tarballACL: public-read
+  storage-proxy:
+    meta_backend: aws-s3-storage
+    packument_backend: aws-s3-storage
+    tarball_backend: aws-s3-storage
+    backends:
+      aws-s3-storage:
+        bucket: openupm
+        region: us-east-1
+        endpoint: http://127.0.0.1:9000
+        accessKeyId: admin
+        secretAccessKey: password
+        s3ForcePathStyle: true
+        keyPrefix: 'verdaccio/'
+        tarballACL: public-read
 
 tarball_url_redirect: https://openupm.sfo2.cdn.digitaloceanspaces.com/verdaccio/${packageName}/${filename}
 
