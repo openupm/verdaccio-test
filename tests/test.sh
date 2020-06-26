@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
-
-UPM_CLI="npm --registry http://127.0.0.1:4873"
+REGISTRY_URL="http://127.0.0.1:4873"
+UPM_CLI="npm --registry $REGISTRY_URL"
 load ../node_modules/bats-support/load
 load ../node_modules/bats-assert/load
 load ../node_modules/bats-file/load
@@ -39,6 +39,13 @@ teardown () {
   run $UPM_CLI search mypkg
   assert_success
   assert_output --partial 'mypkg'
+}
+
+@test "should redirect tarball" {
+  run curl -s -D - -o /dev/null $REGISTRY_URL/mypkg/-/mypkg-1.0.0.tgz
+  assert_success
+  assert_output --partial '302 Found'
+  assert_output --partial 'Location: https://openupm.sfo2.cdn.digitaloceanspaces.com/verdaccio/mypkg/mypkg-1.0.0.tgz'
 }
 
 @test "should unpublish mypkg" {
