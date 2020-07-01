@@ -113,3 +113,4 @@ verdaccio
 minio-data
 .yo-rc.json
 verdaccio-storage-proxy
+verdaccio-redis-storage

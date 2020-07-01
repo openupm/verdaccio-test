@@ -53,6 +53,18 @@ echo "# npm pack..."
 npm pack
 
 divider
+echo "# build redis-storage..."
+cd "$DIR/verdaccio-redis-storage"
+echo "# clean..."
+rm -f *.tgz
+echo "# npm install..."
+npm install
+echo "# npm run build..."
+npm run build
+echo "# npm pack..."
+npm pack
+
+divider
 echo "# install..."
 cd "$DIR/server"
 echo "# clean..."
@@ -61,6 +73,8 @@ echo "# npm install verdaccio..."
 npm install -f "$DIR"/verdaccio/verdaccio-*.tgz
 echo "# npm install aws-s3-storage..."
 npm install -f "$DIR"/monorepo/plugins/aws-s3-storage/verdaccio-*.tgz
+echo "# npm install redis-storage..."
+npm install -f "$DIR"/verdaccio-redis-storage/verdaccio-*.tgz
 echo "# npm install verdaccio-storage-proxy..."
 npm install -f "$DIR"/verdaccio-storage-proxy/verdaccio-*.tgz
 divider

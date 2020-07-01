@@ -7,6 +7,9 @@ function divider() {
 }
 
 divider
+echo "# clean redis..."
+redis-cli KEYS "ve:*" | xargs redis-cli DEL || true
+
 echo "# run servers..."
 ./run-servers.sh
 
@@ -16,7 +19,7 @@ npm-cli-adduser -u openupm -p openupm4u -e test@openupm.com -r http://127.0.0.1:
 
 divider
 echo "# run bats..."
-bats ./tests/*.sh
+bats ./tests/*.sh --tap
 
 divider
 echo "# stop servers..."

@@ -62,10 +62,14 @@ logs:
 
 store:
   storage-proxy:
-    meta_backend: aws-s3-storage
-    packument_backend: aws-s3-storage
+    database_backend: redis-storage
+    search_backend: redis-storage
+    packument_backend: redis-storage
     tarball_backend: aws-s3-storage
     backends:
+      redis-storage:
+        host: 127.0.0.1
+        port: 6379
       aws-s3-storage:
         bucket: openupm
         region: us-east-1
