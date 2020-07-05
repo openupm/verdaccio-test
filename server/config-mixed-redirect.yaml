@@ -1,0 +1,86 @@
+#
+# This is the default config file. It allows all users to do anything,
+# so don't use it on production systems.
+#
+# Look here for more config file examples:
+# https://github.com/verdaccio/verdaccio/tree/master/conf
+#
+
+# path to a directory with all packages
+storage: ./storage
+
+# path to a directory with plugins to include
+plugins: ./plugins
+
+max_body_size: 200mb
+
+listen: 127.0.0.1:4873
+
+# You can specify HTTP/1.1 server keep alive timeout in seconds for incomming connections.
+# A value of 0 makes the http server behave similarly to Node.js versions prior to 8.0.0, which did not have a keep-alive timeout.
+# WORKAROUND: Through given configuration you can workaround following issue https://github.com/verdaccio/verdaccio/issues/301. Set to 0 in case 60 is not enought.
+server:
+  keepAliveTimeout: 60
+
+middlewares:
+  audit:
+    enabled: true
+
+web:
+  enable: false
+
+auth:
+  htpasswd:
+    file: ./htpasswd
+    # Maximum amount of users allowed to register, defaults to "+inf".
+    # You can set this to -1 to disable registration.
+    max_users: -1
+
+# a list of other known repositories we can talk to
+# uplinks:
+#   unity:
+#     url: https://packages.unity.com
+#    cache: false
+
+packages:
+  '@*/*':
+    # scoped packages
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticate
+    # proxy: unity
+
+  '**':
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
+    # proxy: unity
+
+# log settings
+logs:
+  - {type: stdout, format: pretty, level: trace}
+
+store:
+  storage-proxy:
+    database_backend: redis-storage
+    search_backend: redis-storage
+    packument_backend: redis-storage
+    tarball_backend: aws-s3-storage
+    backends:
+      redis-storage:
+        host: 127.0.0.1
+        port: 6379
+      aws-s3-storage:
+        bucket: openupm
+        region: us-east-1
+        endpoint: http://127.0.0.1:9000
+        accessKeyId: admin
+        secretAccessKey: password
+        s3ForcePathStyle: true
+        keyPrefix: 'verdaccio/'
+        tarballACL: public-read
+
+experiments:
+  search: true
+
+tarball_url_redirect: https://openupm.sfo2.cdn.digitaloceanspaces.com/verdaccio/${packageName}/${filename}

@@ -2,8 +2,8 @@
 set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 function divider() {
-    printf %"$(tput cols)"s |tr " " "-"
-    printf "\n"
+  printf %"$(tput cols)"s |tr " " "-"
+  printf "\n"
 }
 
 ./stop-servers.sh
@@ -23,6 +23,10 @@ ps axf | grep minio | grep -v grep | awk '{print " PID " $1}'
 
 echo -n "# start verdaccio..."
 cd server
+# start verdaccio
 npm run server > "$DIR"/logs/verdaccio.log 2>&1 &
+# wait server start...
 timeout 15s grep -q 'http address' <(tail -f "$DIR"/logs/verdaccio.log)
+# print PID
 ps axf | grep verdaccio | grep -v grep | grep -v "sh -c" | awk '{print " PID " $1}'
+echo "# config: $VERDACCIO_CONFIG"

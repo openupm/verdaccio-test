@@ -80,7 +80,5 @@ store:
         keyPrefix: 'verdaccio/'
         tarballACL: public-read
 
-tarball_url_redirect: https://openupm.sfo2.cdn.digitaloceanspaces.com/verdaccio/${packageName}/${filename}
-
 experiments:
   search: true

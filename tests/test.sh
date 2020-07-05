@@ -42,10 +42,30 @@ teardown () {
 }
 
 @test "should redirect tarball" {
+  [ -z "$TEST_TARBALL_REDIRECT" ] && skip
   run curl -s -D - -o /dev/null $REGISTRY_URL/mypkg/-/mypkg-1.0.0.tgz
   assert_success
   assert_output --partial '302 Found'
   assert_output --partial 'Location: https://openupm.sfo2.cdn.digitaloceanspaces.com/verdaccio/mypkg/mypkg-1.0.0.tgz'
+}
+
+@test "should download tarball" {
+  [ ! -z "$TEST_TARBALL_REDIRECT" ] && skip
+  # clean
+  rm -f /tmp/mypkg-1.0.0.tgz
+  # download
+  run curl -s -o /tmp/mypkg-1.0.0.tgz $REGISTRY_URL/mypkg/-/mypkg-1.0.0.tgz
+  assert_success
+  # file should exist
+  assert_file_exist /tmp/mypkg-1.0.0.tgz
+  run file /tmp/mypkg-1.0.0.tgz
+  assert_success
+  # file should be a gzip
+  assert_output --partial 'gzip compressed data'
+  run tar -ztvf /tmp/mypkg-1.0.0.tgz
+  # file can be viewed
+  assert_success
+  assert_output --partial 'package/package.json'
 }
 
 @test "should unpublish mypkg" {

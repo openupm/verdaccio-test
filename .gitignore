@@ -114,3 +114,5 @@ minio-data
 .yo-rc.json
 verdaccio-storage-proxy
 verdaccio-redis-storage
+server/config-tmp-*.yaml
+server/storage
