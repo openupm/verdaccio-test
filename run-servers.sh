@@ -1,9 +1,19 @@
 #!/bin/bash
 set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+VERDACCIO_LOG="$DIR"/logs/verdaccio.log
+MINIO_LOG="$DIR"/logs/minio.log
 function divider() {
   printf %"$(tput cols)"s |tr " " "-"
   printf "\n"
+}
+function wait_file() {
+  local file="$1"; shift
+  local wait_seconds="${1:-10}"; shift # 10 seconds as default timeout
+
+  until test $((wait_seconds--)) -eq 0 -o -f "$file" ; do sleep 1; done
+
+  ((++wait_seconds))
 }
 
 ./stop-servers.sh
@@ -17,16 +27,24 @@ rm -rf "$DIR/minio-data/"
 mkdir -p "$DIR/minio-data/openupm"
 
 echo -n "# start minio..."
-MINIO_REGION=us-east-1 MINIO_ACCESS_KEY=admin MINIO_SECRET_KEY=password minio server minio-data > "$DIR"/logs/minio.log 2>&1 &
-timeout 15s grep -q 'Endpoint' <(tail -f "$DIR"/logs/minio.log)
+MINIO_REGION=us-east-1 MINIO_ACCESS_KEY=admin MINIO_SECRET_KEY=password minio server minio-data > "$MINIO_LOG" 2>&1 &
+wait_file "$MINIO_LOG" 5 || {
+  echo "Verdaccio log file missing after waiting for $? secs: $MINIO_LOG"
+  exit 1
+}
+timeout 15s grep -q 'Endpoint' <(tail -f "$MINIO_LOG")
 ps axf | grep minio | grep -v grep | awk '{print " PID " $1}'
 
 echo -n "# start verdaccio..."
 cd server
 # start verdaccio
-npm run server > "$DIR"/logs/verdaccio.log 2>&1 &
+npm run server > "$VERDACCIO_LOG" 2>&1 &
+wait_file "$VERDACCIO_LOG" 5 || {
+  echo "Verdaccio log file missing after waiting for $? secs: $VERDACCIO_LOG"
+  exit 1
+}
 # wait server start...
-timeout 15s grep -q 'http address' <(tail -f "$DIR"/logs/verdaccio.log)
+timeout 15s grep -q 'http address' <(tail -f "$VERDACCIO_LOG")
 # print PID
 ps axf | grep verdaccio | grep -v grep | grep -v "sh -c" | awk '{print " PID " $1}'
 echo "# config: $VERDACCIO_CONFIG"
