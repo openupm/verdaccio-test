@@ -22,10 +22,6 @@ echo "# clean logs..."
 rm -rf logs
 mkdir -p logs
 
-echo "# clean minio-data..."
-rm -rf "$DIR/minio-data/"
-mkdir -p "$DIR/minio-data/openupm"
-
 echo -n "# start minio..."
 MINIO_REGION=us-east-1 MINIO_ACCESS_KEY=admin MINIO_SECRET_KEY=password minio server minio-data > "$MINIO_LOG" 2>&1 &
 wait_file "$MINIO_LOG" 5 || {

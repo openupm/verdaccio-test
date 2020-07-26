@@ -1,5 +1,7 @@
 #!/bin/bash
 set -e
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 
 function divider() {
   printf %"$(tput cols)"s |tr " " "$1"
@@ -10,6 +12,14 @@ function run_pass() {
   divider "="
   echo "[$1] clean redis..."
   redis-cli KEYS "ve:*" | xargs redis-cli DEL || true
+
+  echo "# clean minio-data..."
+  rm -rf "$DIR/minio-data/"
+  mkdir -p "$DIR/minio-data/openupm"
+
+  echo "# clean fs..."
+  rm -rf "$DIR/server/storage/"
+  mkdir -p "$DIR/server/storage/"
 
   echo "[$1] run servers..."
   ./run-servers.sh
@@ -28,7 +38,11 @@ function run_pass() {
 }
 
 declare -a arr=(
+  "config-fs-nosearch.yaml"
+  "config-fs.yaml"
+  "config-redis-nosearch.yaml"
   "config-redis.yaml"
+  "config-s3-nosearch.yaml"
   "config-s3.yaml"
   "config-mixed.yaml"
   "config-mixed-redirect.yaml"

@@ -39,6 +39,7 @@ teardown () {
   run $UPM_CLI search mypkg
   assert_success
   assert_output --partial 'mypkg'
+  refute_output --partial 'No matches found'
 }
 
 @test "should redirect tarball" {
