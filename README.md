@@ -28,14 +28,14 @@ git clone git@github.com:openupm/verdaccio-storage-proxy.git
 
 # Install npm libs
 npm install
-npm install -g npm-cli-login
+npm install -g npm-cli-login npm-cli-adduser
 
 # Build verdaccio
-./build-verdaccio.sh
+./build-all.sh
 ```
 
 Run tests
 
 ```bash
-npm test
+./run-tests.sh
 ```
