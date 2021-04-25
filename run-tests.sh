@@ -38,11 +38,11 @@ function run_pass() {
 }
 
 declare -a arr=(
-  "config-fs-nosearch.yaml"
+  # "config-fs-nosearch.yaml"
   "config-fs.yaml"
-  "config-redis-nosearch.yaml"
+  # "config-redis-nosearch.yaml"
   "config-redis.yaml"
-  "config-s3-nosearch.yaml"
+  # "config-s3-nosearch.yaml"
   "config-s3.yaml"
   "config-mixed.yaml"
   "config-mixed-redirect.yaml"
