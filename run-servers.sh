@@ -28,7 +28,7 @@ wait_file "$MINIO_LOG" 5 || {
   echo "Verdaccio log file missing after waiting for $? secs: $MINIO_LOG"
   exit 1
 }
-timeout 15s grep -q 'Endpoint' <(tail -f "$MINIO_LOG")
+timeout 15s grep -q 'Endpoint' <(tail -n1000 -f "$MINIO_LOG")
 ps axf | grep minio | grep -v grep | awk '{print " PID " $1}'
 
 echo -n "# start verdaccio..."
@@ -40,7 +40,7 @@ wait_file "$VERDACCIO_LOG" 5 || {
   exit 1
 }
 # wait server start...
-timeout 15s grep -q 'http address' <(tail -f "$VERDACCIO_LOG")
+timeout 15s grep -q 'http address' <(tail -n1000 -f "$VERDACCIO_LOG")
 # print PID
 ps axf | grep verdaccio | grep -v grep | grep -v "sh -c" | awk '{print " PID " $1}'
 echo "# config: $VERDACCIO_CONFIG"
