@@ -13,10 +13,11 @@ echo "# clean..."
 git checkout -f openupm
 git checkout -- yarn.lock
 rm -f *.tgz
+rm -rf build
 echo "# patch yarn.lock..."
-find . -name yarn.lock -exec sed -i "s#registry.verdaccio.org#registry.npm.taobao.org#g" {} \;
+find . -name yarn.lock -exec sed -i "s#registry.verdaccio.org#registry.npmjs.org#g" {} \;
 echo "# yarn install..."
-yarn install --frozen-lockfile
+yarn install --immutable
 echo "# yarn code:build..."
 yarn code:build
 echo "# yarn npm pack..."
@@ -30,6 +31,7 @@ git checkout -f openupm
 git checkout -- yarn.lock
 lerna exec "git checkout -f -- yarn.lock package.json package-lock.json > /dev/null 2>&1 || true"
 lerna exec "rm -f *.tgz"
+lerna exec "rm -rf build"
 cd "$DIR/monorepo/plugins/aws-s3-storage"
 rm -f package-lock.json
 echo "# npm install..."
@@ -39,42 +41,51 @@ echo "# npm run build..."
 npm run build
 echo "# npm pack..."
 npm pack
+git checkout -- package.json
+rm -f package-lock.json
 
 divider
 echo "# build storage-proxy..."
 cd "$DIR/verdaccio-storage-proxy"
 echo "# clean..."
 rm -f *.tgz
+rm -rf build
 echo "# npm install..."
 npm install
 echo "# npm run build..."
 npm run build
 echo "# npm pack..."
 npm pack
+git checkout -- package-lock.json
 
 divider
 echo "# build redis-storage..."
 cd "$DIR/verdaccio-redis-storage"
 echo "# clean..."
 rm -f *.tgz
+rm -rf build
 echo "# npm install..."
 npm install
 echo "# npm run build..."
 npm run build
 echo "# npm pack..."
 npm pack
+git checkout -- package-lock.json
 
 divider
 echo "# install..."
 cd "$DIR/server"
 echo "# clean..."
 rm -f package-lock.json
-echo "# npm install verdaccio..."
+git checkout -- package.json
+echo "# install verdaccio..."
 npm install -f "$DIR"/verdaccio/verdaccio-*.tgz
-echo "# npm install aws-s3-storage..."
+echo "# install aws-s3-storage..."
 npm install -f "$DIR"/monorepo/plugins/aws-s3-storage/verdaccio-*.tgz
-echo "# npm install redis-storage..."
+echo "# install redis-storage..."
 npm install -f "$DIR"/verdaccio-redis-storage/verdaccio-*.tgz
-echo "# npm install verdaccio-storage-proxy..."
+echo "# install verdaccio-storage-proxy..."
 npm install -f "$DIR"/verdaccio-storage-proxy/verdaccio-*.tgz
+echo "# install bunyan..."
+npm install bunyan
 divider
