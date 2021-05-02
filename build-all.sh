@@ -23,26 +23,26 @@ yarn code:build
 echo "# yarn npm pack..."
 npm pack
 
-divider
-echo "# build aws-s3-storage..."
-cd "$DIR/monorepo"
-echo "# clean..."
-git checkout -f openupm
-git checkout -- yarn.lock
-lerna exec "git checkout -f -- yarn.lock package.json package-lock.json > /dev/null 2>&1 || true"
-lerna exec "rm -f *.tgz"
-lerna exec "rm -rf build"
-cd "$DIR/monorepo/plugins/aws-s3-storage"
-rm -f package-lock.json
-echo "# npm install..."
-npm install @types/node
-npm install
-echo "# npm run build..."
-npm run build
-echo "# npm pack..."
-npm pack
-git checkout -- package.json
-rm -f package-lock.json
+# divider
+# echo "# build aws-s3-storage..."
+# cd "$DIR/monorepo"
+# echo "# clean..."
+# git checkout -f openupm
+# git checkout -- yarn.lock
+# lerna exec "git checkout -f -- yarn.lock package.json package-lock.json > /dev/null 2>&1 || true"
+# lerna exec "rm -f *.tgz"
+# lerna exec "rm -rf build"
+# cd "$DIR/monorepo/plugins/aws-s3-storage"
+# rm -f package-lock.json
+# echo "# npm install..."
+# npm install @types/node
+# npm install
+# echo "# npm run build..."
+# npm run build
+# echo "# npm pack..."
+# npm pack
+# git checkout -- package.json
+# rm -f package-lock.json
 
 divider
 echo "# build storage-proxy..."
@@ -81,7 +81,7 @@ git checkout -- package.json
 echo "# install verdaccio..."
 npm install -f "$DIR"/verdaccio/verdaccio-*.tgz
 echo "# install aws-s3-storage..."
-npm install -f "$DIR"/monorepo/plugins/aws-s3-storage/verdaccio-*.tgz
+npm install verdaccio-aws-s3-storage@latest
 echo "# install redis-storage..."
 npm install -f "$DIR"/verdaccio-redis-storage/verdaccio-*.tgz
 echo "# install verdaccio-storage-proxy..."
@@ -89,3 +89,5 @@ npm install -f "$DIR"/verdaccio-storage-proxy/verdaccio-*.tgz
 echo "# install bunyan..."
 npm install bunyan
 divider
+
+cat "$DIR"/server/package.json
