@@ -38,14 +38,12 @@ function run_pass() {
 }
 
 declare -a arr=(
-  # "config-fs-nosearch.yaml"
   "config-fs.yaml"
-  # "config-redis-nosearch.yaml"
-  "config-redis.yaml"
-  # "config-s3-nosearch.yaml"
+  "config-fs-redirect.yaml"
   "config-s3.yaml"
-  "config-mixed.yaml"
-  "config-mixed-redirect.yaml"
+  "config-s3-redirect.yaml"
+  "config-proxy-s3-redis.yaml"
+  "config-proxy-s3-redis-redirect.yaml"
   )
 for conf in "${arr[@]}"
 do

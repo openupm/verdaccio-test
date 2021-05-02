@@ -36,11 +36,9 @@ auth:
     # You can set this to -1 to disable registration.
     max_users: -1
 
-# a list of other known repositories we can talk to
-# uplinks:
-#   unity:
-#     url: https://packages.unity.com
-#    cache: false
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
 
 packages:
   '@*/*':
@@ -48,25 +46,20 @@ packages:
     access: $all
     publish: $authenticated
     unpublish: $authenticate
-    # proxy: unity
+
+  'is-number*':
+    access: $all
+    proxy: npmjs
 
   '**':
     access: $all
     publish: $authenticated
     unpublish: $authenticated
-    # proxy: unity
 
 # log settings
 logs:
   - {type: stdout, format: pretty, level: trace}
 
-store:
-  storage-proxy:
-    database_backend: redis-storage
-    search_backend: redis-storage
-    packument_backend: redis-storage
-    tarball_backend: redis-storage
-    backends:
-      redis-storage:
-        host: 127.0.0.1
-        port: 6379
+experiments:
+  search: true
+  tarball_url_redirect: https://openupm.sfo2.cdn.digitaloceanspaces.com/verdaccio/${packageName}/${filename}

@@ -86,3 +86,53 @@ teardown () {
   run $UPM_CLI view mypkg
   assert_failure
 }
+
+@test "should view uplink" {
+  # view is-number package by jonschlinkert which exists in the uplink registry
+  run $UPM_CLI view is-number
+  assert_success
+  assert_output --partial 'jonschlinkert'
+}
+
+# The test will fail on local-storage due to the inconsistent search implementation.
+# @test "should not search uplink" {
+#   # search is-number package by jonschlinkert which exists in the uplink registry
+#   run $UPM_CLI search is-number
+#   assert_success
+#   assert_output --partial 'No matches found'
+#   # refute_output --partial 'No matches found'
+# }
+
+@test "should redirect uplink tarball" {
+  # fetch is-number package by jonschlinkert which exists in the uplink registry
+  [ -z "$TEST_TARBALL_REDIRECT" ] && skip
+  # The first time the registry will download the uplink package and return a stream
+  run curl -s -D - -o /dev/null $REGISTRY_URL/is-number/-/is-number-7.0.0.tgz
+  assert_success
+  assert_output --partial '200 OK'
+  # The second time the registry will return a HTTP redirect
+  run curl -s -D - -o /dev/null $REGISTRY_URL/is-number/-/is-number-7.0.0.tgz
+  assert_success
+  assert_output --partial '302 Found'
+  assert_output --partial 'Location: https://openupm.sfo2.cdn.digitaloceanspaces.com/verdaccio/is-number/is-number-7.0.0.tgz'
+}
+
+@test "should download uplink tarball" {
+  # fetch is-number package by jonschlinkert which exists in the uplink registry
+  [ ! -z "$TEST_TARBALL_REDIRECT" ] && skip
+  # clean
+  rm -f /tmp/is-number-7.0.0.tgz
+  # download
+  run curl -s -o /tmp/is-number-7.0.0.tgz $REGISTRY_URL/is-number/-/is-number-7.0.0.tgz
+  assert_success
+  # file should exist
+  assert_file_exist /tmp/is-number-7.0.0.tgz
+  run file /tmp/is-number-7.0.0.tgz
+  assert_success
+  # file should be a gzip
+  assert_output --partial 'gzip compressed data'
+  run tar -ztvf /tmp/is-number-7.0.0.tgz
+  # file can be viewed
+  assert_success
+  assert_output --partial 'package/package.json'
+}
