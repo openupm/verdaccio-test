@@ -1,0 +1,15 @@
+{
+  "name": "server-base",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "verdaccio": "^5.0.4",
+    "verdaccio-aws-s3-storage": "^10.1.0"
+  }
+}
