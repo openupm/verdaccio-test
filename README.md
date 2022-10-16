@@ -27,8 +27,8 @@ git clone --single-branch --branch monorepo git@github.com:favoyang/monorepo.git
 git clone git@github.com:openupm/verdaccio-storage-proxy.git
 
 # Install npm libs
+nvm use
 npm install
-npm install -g npm-cli-login npm-cli-adduser
 
 # Build verdaccio
 ./build-all.sh
@@ -37,5 +37,6 @@ npm install -g npm-cli-login npm-cli-adduser
 Run tests
 
 ```bash
+nvm use
 ./run-tests.sh
 ```

@@ -10,6 +10,12 @@ function divider() {
 
 function run_pass() {
   divider "="
+  echo "node version: "
+  node --version
+
+  echo "yarn version:"
+  yarn --version
+
   echo "[$1] clean redis..."
   redis-cli KEYS "ve:*" | xargs redis-cli DEL || true
 
@@ -26,7 +32,7 @@ function run_pass() {
 
   divider "-"
   echo "[$1] npm login..."
-  npm-cli-adduser -u openupm -p openupm4u -e test@openupm.com -r http://127.0.0.1:4873/
+  npm run npm-cli-adduser -- -u openupm -p openupm4u -e test@openupm.com -r http://127.0.0.1:4873/
 
   divider "-"
   echo "[$1] run bats..."

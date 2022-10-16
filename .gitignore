@@ -116,3 +116,6 @@ verdaccio-storage-proxy
 verdaccio-redis-storage
 server/config-tmp-*.yaml
 server/storage
+
+.yarn/
+.yarnrc
