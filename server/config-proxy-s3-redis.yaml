@@ -25,6 +25,8 @@ server:
 middlewares:
   audit:
     enabled: true
+  redis-search-patch:
+    enabled: true
 
 web:
   enable: false

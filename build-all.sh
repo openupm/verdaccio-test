@@ -81,6 +81,20 @@ npm pack
 git checkout -- package-lock.json
 
 divider
+echo "# build redis-search-patch..."
+cd "$DIR/verdaccio-redis-search-patch"
+echo "# clean..."
+rm -f *.tgz
+rm -rf build
+echo "# npm install..."
+npm install
+echo "# npm run build..."
+npm run build
+echo "# npm pack..."
+npm pack
+git checkout -- package-lock.json
+
+divider
 echo "# install..."
 cd "$DIR/server"
 echo "# clean..."
@@ -92,6 +106,8 @@ echo "# install aws-s3-storage..."
 npm install verdaccio-aws-s3-storage@latest
 echo "# install redis-storage..."
 npm install -f "$DIR"/verdaccio-redis-storage/verdaccio-*.tgz
+echo "# install redis-search-patch..."
+npm install -f "$DIR"/verdaccio-redis-search-patch/verdaccio-*.tgz
 echo "# install verdaccio-storage-proxy..."
 npm install -f "$DIR"/verdaccio-storage-proxy/verdaccio-*.tgz
 echo "# install bunyan..."
