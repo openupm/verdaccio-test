@@ -110,10 +110,13 @@ package-lock.json
 node_modules
 monorepo
 verdaccio
+verdaccio-6/
 minio-data
 .yo-rc.json
+RediSearch
 verdaccio-storage-proxy
 verdaccio-redis-storage
+verdaccio-redis-search-patch
 server/config-tmp-*.yaml
 server/storage
 
