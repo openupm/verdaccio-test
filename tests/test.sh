@@ -36,6 +36,7 @@ teardown () {
 }
 
 @test "should search mypkg" {
+  [ -z "$TEST_SEARCH_ENDPOINT" ] && skip
   run $UPM_CLI search mypkg
   assert_success
   assert_output --partial 'mypkg'

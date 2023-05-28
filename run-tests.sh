@@ -60,7 +60,15 @@ do
   else
     unset "TEST_TARBALL_REDIRECT"
   fi
+  # toggle TEST_SEARCH_ENDPOINT flag based on config name
+  if [[ "$VERDACCIO_CONFIG" == *"search"* ]]; then
+    export TEST_SEARCH_ENDPOINT=1
+  else
+    unset "TEST_SEARCH_ENDPOINT"
+  fi
   run_pass "$VERDACCIO_CONFIG"
 done
 unset "VERDACCIO_CONFIG" || true
 unset "TEST_TARBALL_REDIRECT" || true
+unset "TEST_SEARCH_ENDPOINT" || true
+
