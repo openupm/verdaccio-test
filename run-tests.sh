@@ -32,7 +32,7 @@ function run_pass() {
 
   divider "-"
   echo "[$1] npm login..."
-  npm run npm-cli-adduser -- -u openupm -p openupm4u -e test@openupm.com -r http://127.0.0.1:4873/
+  npm run npm-cli-login -- login -u openupm -p openupm4u -e test@openupm.com -r http://127.0.0.1:4873
 
   divider "-"
   echo "[$1] run bats..."
@@ -48,7 +48,7 @@ declare -a arr=(
   "config-fs-redirect.yaml"
   "config-s3.yaml"
   "config-s3-redirect.yaml"
-  "config-proxy-s3-redis.yaml"
+  "config-proxy-s3-redis-search.yaml"
   "config-proxy-s3-redis-redirect.yaml"
   )
 for conf in "${arr[@]}"

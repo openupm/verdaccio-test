@@ -6,7 +6,7 @@
     "test": "tests"
   },
   "scripts": {
-    "npm-cli-adduser": "npm-cli-adduser",
+    "npm-cli-login": "npm-cli-login",
     "test": "./run-tests.sh"
   },
   "author": "Favo Yang",
@@ -17,6 +17,6 @@
     "bats-support": "git+https://github.com/ztombol/bats-support.git"
   },
   "dependencies": {
-    "npm-cli-adduser": "^1.1.4"
+    "npm-cli-login": "^1.0.0"
   }
 }
