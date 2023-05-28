@@ -71,22 +71,12 @@ teardown () {
 }
 
 @test "should get install counts" {
-  [ ! -z "$TEST_INSTALL_COUNTS" ] && skip
-  # # clean
-  # rm -f /tmp/mypkg-1.0.0.tgz
-  # # download
-  # run curl -s -o /tmp/mypkg-1.0.0.tgz $REGISTRY_URL/mypkg/-/mypkg-1.0.0.tgz
-  # assert_success
-  # # file should exist
-  # assert_file_exist /tmp/mypkg-1.0.0.tgz
-  # run file /tmp/mypkg-1.0.0.tgz
-  # assert_success
-  # # file should be a gzip
-  # assert_output --partial 'gzip compressed data'
-  # run tar -ztvf /tmp/mypkg-1.0.0.tgz
-  # # file can be viewed
-  # assert_success
-  # assert_output --partial 'package/package.json'
+  [ -z "$TEST_INSTALL_COUNTS" ] && skip
+  today=$(date +%Y-%m-%d)
+  json='{"downloads":1,"start":"1970-01-01","end":"'"$today"'","package":"mypkg"}'
+  run curl -s $REGISTRY_URL/downloads/point/1970-01-01:$today/mypkg
+  assert_success
+  assert_output --partial $json
 }
 
 @test "should unpublish mypkg" {

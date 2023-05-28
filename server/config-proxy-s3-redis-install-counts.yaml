@@ -27,7 +27,7 @@ middlewares:
     enabled: true
   redis-search-patch:
     enabled: true
-  redis-install-counts:
+  install-counts:
     enabled: true
     redis:
       host: 127.0.0.1

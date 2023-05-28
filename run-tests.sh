@@ -72,7 +72,7 @@ do
     unset "TEST_SEARCH_ENDPOINT"
   fi
   # toggle TEST_INSTALL_COUNTS flag based on config name
-  if [[ "$VERDACCIO_CONFIG" == *"install-counts"* ]]; then
+  if [[ "$VERDACCIO_CONFIG" == *"install"* ]]; then
     export TEST_INSTALL_COUNTS=1
   else
     unset "TEST_INSTALL_COUNTS"
