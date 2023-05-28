@@ -117,6 +117,7 @@ RediSearch
 verdaccio-storage-proxy
 verdaccio-redis-storage
 verdaccio-redis-search-patch
+verdaccio-install-counts
 server/config-tmp*.yaml
 server/storage
 

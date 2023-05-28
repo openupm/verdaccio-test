@@ -95,6 +95,20 @@ npm pack
 git checkout -- package-lock.json
 
 divider
+echo "# build verdaccio-install-counts..."
+cd "$DIR/verdaccio-install-counts"
+echo "# clean..."
+rm -f *.tgz
+rm -rf build
+echo "# npm install..."
+npm install
+echo "# npm run build..."
+npm run build
+echo "# npm pack..."
+npm pack
+git checkout -- package-lock.json
+
+divider
 echo "# install..."
 cd "$DIR/server"
 echo "# clean..."
@@ -110,6 +124,8 @@ echo "# install redis-search-patch..."
 npm install -f "$DIR"/verdaccio-redis-search-patch/verdaccio-*.tgz
 echo "# install verdaccio-storage-proxy..."
 npm install -f "$DIR"/verdaccio-storage-proxy/verdaccio-*.tgz
+echo "# install verdaccio-install-counts..."
+npm install -f "$DIR"/verdaccio-install-counts/verdaccio-*.tgz
 echo "# install bunyan..."
 npm install bunyan
 divider

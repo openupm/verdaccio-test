@@ -17,7 +17,11 @@ function run_pass() {
   yarn --version
 
   echo "[$1] clean redis..."
-  redis-cli KEYS "ve:*" | xargs redis-cli DEL || true
+  redis-cli KEYS "ve:*" | xargs redis-cli DEL > /dev/null 2>&1 || true
+  echo "TS.QUERYINDEX category=tspkghit:daily" | redis-cli | cut -d" " -f2 | sed 's/^/DEL /' | redis-cli > /dev/null 2>&1 || true
+  echo "DEL zpkghit:alltime" | redis-cli > /dev/null 2>&1 || true
+  echo "DEL zpkghit:lastmonth" | redis-cli > /dev/null 2>&1 || true
+  echo "SCAN 0 MATCH pkghit:ver:* COUNT 1000000" | redis-cli | cut -d" " -f2 | sed 's/^/DEL /' | redis-cli > /dev/null 2>&1 || true
 
   echo "# clean minio-data..."
   rm -rf "$DIR/minio-data/"
@@ -50,6 +54,7 @@ declare -a arr=(
   "config-s3-redirect.yaml"
   "config-proxy-s3-redis-search.yaml"
   "config-proxy-s3-redis-redirect.yaml"
+  "config-proxy-s3-redis-install-counts.yaml"
   )
 for conf in "${arr[@]}"
 do
@@ -66,9 +71,16 @@ do
   else
     unset "TEST_SEARCH_ENDPOINT"
   fi
+  # toggle TEST_INSTALL_COUNTS flag based on config name
+  if [[ "$VERDACCIO_CONFIG" == *"install-counts"* ]]; then
+    export TEST_INSTALL_COUNTS=1
+  else
+    unset "TEST_INSTALL_COUNTS"
+  fi
   run_pass "$VERDACCIO_CONFIG"
 done
 unset "VERDACCIO_CONFIG" || true
 unset "TEST_TARBALL_REDIRECT" || true
 unset "TEST_SEARCH_ENDPOINT" || true
+unset "TEST_INSTALL_COUNTS" || true
 

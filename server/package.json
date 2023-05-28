@@ -4,7 +4,11 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "server": "verdaccio -c $VERDACCIO_CONFIG"
+    "server": "./node_modules/verdaccio/bin/verdaccio -c $VERDACCIO_CONFIG",
+    "server-dev": "nodemon --watch . --watch  $(realpath node_modules/verdaccio-install-counts) --watch $(realpath node_modules/verdaccio-redis-storage) --watch $(realpath node_modules/verdaccio-redis-search-patch) --watch $(realpath node_modules/verdaccio-storage-proxy) ./node_modules/verdaccio/bin/verdaccio -c $VERDACCIO_CONFIG"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
 }
