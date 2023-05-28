@@ -1,4 +1,10 @@
 {
   "name": "mypkg",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "description": "mypkg",
+  "author": {
+    "name": "Barney Rubble",
+    "email": "barney@example.com",
+    "url": "https://barnyrubble.example.com/"
+  }
 }
