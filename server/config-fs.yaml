@@ -60,5 +60,3 @@ packages:
 logs:
   - {type: stdout, format: pretty, level: trace}
 
-experiments:
-  search: true

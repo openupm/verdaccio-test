@@ -78,5 +78,4 @@ store:
         tarballACL: public-read
 
 experiments:
-  search: true
   tarball_url_redirect: https://openupm.sfo2.cdn.digitaloceanspaces.com/verdaccio/${packageName}/${filename}

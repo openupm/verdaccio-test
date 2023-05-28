@@ -76,6 +76,3 @@ store:
         s3ForcePathStyle: true
         keyPrefix: 'verdaccio/'
         tarballACL: public-read
-
-experiments:
-  search: true
