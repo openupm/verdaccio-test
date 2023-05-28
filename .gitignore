@@ -117,7 +117,7 @@ RediSearch
 verdaccio-storage-proxy
 verdaccio-redis-storage
 verdaccio-redis-search-patch
-server/config-tmp-*.yaml
+server/config-tmp*.yaml
 server/storage
 
 .yarn/
