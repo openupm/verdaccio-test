@@ -46,6 +46,39 @@ jobs:
         sudo cp RediSearch/bin/linux-x64-release/search/redisearch.so /usr/lib/redis/modules/redisearch.so
         sudo chmod 755 /usr/lib/redis/modules/redisearch.so
         sudo chown root:root /usr/lib/redis/modules/redisearch.so
+    # Build RedisTimeSeries
+    - name: RedisTimeSeries | Checkout RedisTimeSeries
+      uses: actions/checkout@v2
+      with:
+        repository: RedisTimeSeries/RedisTimeSeries
+        ref: v1.10.0
+        path: RedisTimeSeries
+        submodules: recursive
+    - name: RedisTimeSeries | Cleans and resets the git repo and its submodules
+      run: |
+        cd RedisTimeSeries
+        git clean -xfd
+        git submodule foreach --recursive git clean -xfd
+        git reset --hard
+        git submodule foreach --recursive git reset --hard
+        git submodule update --init --recursive
+    - name: RedisTimeSeries | Setup
+      run: |
+        cd RedisTimeSeries
+        sbin/setup
+    - name: RedisTimeSeries | Build
+      run: |
+        cd RedisTimeSeries
+        make
+    - name: RedisTimeSeries | Create redis modules dir
+      run: |
+        sudo mkdir -p /usr/lib/redis/modules/
+        sudo chown root:root /usr/lib/redis/modules/
+    - name: RedisTimeSeries | Copy to redis modules dir
+      run: |
+        sudo cp RedisTimeSeries/bin/linux-x64-release/redistimeseries.so /usr/lib/redis/modules/redistimeseries.so
+        sudo chmod 755 /usr/lib/redis/modules/redistimeseries.so
+        sudo chown root:root /usr/lib/redis/modules/redistimeseries.so
     # Build Bats
     - name: Bats | Checkout Bats
       uses: actions/checkout@v2
