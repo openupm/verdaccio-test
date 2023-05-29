@@ -143,9 +143,5 @@ jobs:
     - name: Verdaccio | Build verdaccio
       run: ./build-all.sh
     # Run tests
-    - name: Tests | prepare folders
-      run: |
-        mkdir -p logs
-        mkdir -p minio-data
     - name: Tests | Run tests
       run: ./run-tests.sh

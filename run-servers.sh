@@ -3,6 +3,11 @@ set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 VERDACCIO_LOG="$DIR"/logs/verdaccio.log
 MINIO_LOG="$DIR"/logs/minio.log
+
+echo $DIR
+echo $VERDACCIO_LOG
+echo $MINIO_LOG
+
 function divider() {
   printf %"$(tput cols)"s |tr " " "-"
   printf "\n"
@@ -21,6 +26,13 @@ function wait_file() {
 echo "# clean logs..."
 rm -rf logs
 mkdir -p logs
+
+echo "ls -al"
+ls -al
+echo "logs"
+ls -al logs
+echo "minio-data"
+ls -al minio-data
 
 echo -n "# start minio..."
 MINIO_REGION=us-east-1 MINIO_ACCESS_KEY=admin MINIO_SECRET_KEY=password minio server minio-data > "$MINIO_LOG" 2>&1 &
