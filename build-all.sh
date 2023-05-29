@@ -10,9 +10,12 @@ echo "# set yarn version..."
 yarn set version 1.22.19
 divider
 
-echo "# set yarn version..."
-source ~/.nvm/nvm.sh
-nvm use
+# Run nvm only in local
+if [ -z "$GITHUB_ACTIONS" ]; then
+    echo "# run nvm..."
+    source ~/.nvm/nvm.sh
+    nvm use
+fi
 
 divider
 echo "# build verdaccio..."
