@@ -33,12 +33,12 @@ jobs:
         ref: openupm
         path: verdaccio
 
-    - name: Checkout monorepo
-      uses: actions/checkout@v2
-      with:
-        repository: favoyang/monorepo
-        ref: monorepo
-        path: monorepo
+    # - name: Checkout monorepo
+    #   uses: actions/checkout@v2
+    #   with:
+    #     repository: favoyang/monorepo
+    #     ref: monorepo
+    #     path: monorepo
 
     - name: Checkout verdaccio-storage-proxy
       uses: actions/checkout@v2
