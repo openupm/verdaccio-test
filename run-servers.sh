@@ -25,7 +25,7 @@ mkdir -p logs
 echo -n "# start minio..."
 MINIO_REGION=us-east-1 MINIO_ACCESS_KEY=admin MINIO_SECRET_KEY=password minio server minio-data > "$MINIO_LOG" 2>&1 &
 wait_file "$MINIO_LOG" 5 || {
-  echo "Verdaccio log file missing after waiting for $? secs: $MINIO_LOG"
+  echo "Minio log file missing after waiting for $? secs: $MINIO_LOG"
   exit 1
 }
 timeout 15s grep -q 'Endpoint' <(tail -n1000 -f "$MINIO_LOG")

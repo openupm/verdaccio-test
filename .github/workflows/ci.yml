@@ -13,6 +13,10 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '14.x'
+    - name: Go | Install Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.15
     # Build RedisSearch
     - name: RedisSearch | Checkout RedisSearch
       uses: actions/checkout@v2
