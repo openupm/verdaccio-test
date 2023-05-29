@@ -78,6 +78,9 @@ do
     unset "TEST_INSTALL_COUNTS"
   fi
   run_pass "$VERDACCIO_CONFIG"
+  if [ $? -ne 0 ]; then
+    exit 1;
+  fi
 done
 unset "VERDACCIO_CONFIG" || true
 unset "TEST_TARBALL_REDIRECT" || true
