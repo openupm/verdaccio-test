@@ -35,13 +35,12 @@ echo "minio-data"
 ls -al minio-data
 
 echo -n "# start minio..."
-# MINIO_REGION=us-east-1 MINIO_ACCESS_KEY=admin MINIO_SECRET_KEY=password minio server minio-data > "$MINIO_LOG" 2>&1 &
-MINIO_REGION=us-east-1 MINIO_ACCESS_KEY=admin MINIO_SECRET_KEY=password minio server minio-data
+MINIO_REGION=us-east-1 MINIO_ACCESS_KEY=admin MINIO_SECRET_KEY=password minio server minio-data > "$MINIO_LOG" 2>&1 &
 wait_file "$MINIO_LOG" 5 || {
   echo "Minio log file missing after waiting for $? secs: $MINIO_LOG"
   exit 1
 }
-timeout 15s grep -q 'Endpoint' <(tail -n1000 -f "$MINIO_LOG")
+timeout 15s grep -q 'MinIO Object Storage Server' <(tail -n1000 -f "$MINIO_LOG")
 ps axf | grep minio | grep -v grep | awk '{print " PID " $1}'
 
 echo -n "# start verdaccio..."
