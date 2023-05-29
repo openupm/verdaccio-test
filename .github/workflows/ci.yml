@@ -1,0 +1,44 @@
+name: Build and test
+
+on: [push]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14.x'
+    - name: Install Bats
+      run: |
+        sudo git clone https://github.com/bats-core/bats-core.git bats-core
+        cd bats-core
+        sudo ./install.sh /usr/local
+    - name: Install MinIO
+      run: |
+        wget https://dl.min.io/server/minio/release/linux-amd64/minio
+        chmod +x minio
+        sudo mv minio /usr/local/bin/
+    - name: Clone verdaccio
+      run: git clone --single-branch --branch openupm git@github.com:favoyang/verdaccio.git
+    - name: Clone monorepo
+      run: git clone --single-branch --branch monorepo git@github.com:favoyang/monorepo.git
+    - name: Clone verdaccio-storage-proxy
+      run: git clone git@github.com:openupm/verdaccio-storage-proxy.git
+    - name: Clone verdaccio-redis-storage
+      run: git clone git@github.com:openupm/verdaccio-redis-storage.git
+    - name: Clone verdaccio-redis-search-patch
+      run: git clone git@github.com:openupm/verdaccio-redis-search-patch.git    
+    - name: Clone verdaccio-install-counts
+      run: git clone git@github.com:openupm/verdaccio-install-counts.git    
+    - name: Install npm libs
+      run: |
+        nvm use
+        npm install
+    - name: Build verdaccio
+      run: ./build-all.sh
+    - name: Run tests
+      run: ./run-tests.sh
