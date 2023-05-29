@@ -79,6 +79,16 @@ jobs:
         sudo cp RedisTimeSeries/bin/linux-x64-release/redistimeseries.so /usr/lib/redis/modules/redistimeseries.so
         sudo chmod 755 /usr/lib/redis/modules/redistimeseries.so
         sudo chown root:root /usr/lib/redis/modules/redistimeseries.so
+    # Redis
+    - name: Redis | setup redis
+      uses: shogo82148/actions-setup-redis@v1
+      with:
+        redis-version: '6.x'
+        redis-conf: |
+          loadmodule /usr/lib/redis/modules/redisearch.so
+          loadmodule /usr/lib/redis/modules/redistimeseries.so
+    - name: Redis | ping redis
+      run: redis-cli ping
     # Build Bats
     - name: Bats | Checkout Bats
       uses: actions/checkout@v2
