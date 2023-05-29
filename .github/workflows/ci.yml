@@ -8,68 +8,89 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
+    # Install Node.js
     - name: Install Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '14.x'
-
+    # Build RedisSearch
+    - name: Checkout RedisSearch
+      uses: actions/checkout@v2
+      with:
+        repository: RediSearch/RediSearch
+        ref: v2.4.15
+        path: RediSearch
+        submodules: recursive
+    - name: Cleans and resets the git repo and its submodules
+      run: |
+        cd ~/RediSearch
+        git clean -xfd
+        git submodule foreach --recursive git clean -xfd
+        git reset --hard
+        git submodule foreach --recursive git reset --hard
+        git submodule update --init --recursive
+    - name: Setup
+      run: |
+        cd ~/RediSearch
+        make setup
+    - name: Build
+      run: |
+        cd ~/RediSearch
+        make build
+    - name: Create redis modules dir
+      run: |
+        sudo mkdir -p /usr/lib/redis/modules/
+        sudo chown root:root /usr/lib/redis/modules/
+    - name: Copy to redis modules dir
+      run: |
+        sudo cp ~/RediSearch/bin/linux-x64-release/search/redisearch.so /usr/lib/redis/modules/redisearch.so
+        sudo chmod 755 /usr/lib/redis/modules/redisearch.so
+        sudo chown root:root /usr/lib/redis/modules/redisearch.so
+    # Build Bats
     - name: Install Bats
       run: |
         sudo git clone https://github.com/bats-core/bats-core.git bats-core
         cd bats-core
         sudo ./install.sh /usr/local
-
+    # Build MinIO
     - name: Install MinIO
       run: |
         wget https://dl.min.io/server/minio/release/linux-amd64/minio
         chmod +x minio
         sudo mv minio /usr/local/bin/
-
+    # Build verdaccio and plugins
     - name: Checkout repositories
       uses: actions/checkout@v2
       with:
         repository: favoyang/verdaccio
         ref: openupm
         path: verdaccio
-
-    # - name: Checkout monorepo
-    #   uses: actions/checkout@v2
-    #   with:
-    #     repository: favoyang/monorepo
-    #     ref: monorepo
-    #     path: monorepo
-
     - name: Checkout verdaccio-storage-proxy
       uses: actions/checkout@v2
       with:
         repository: openupm/verdaccio-storage-proxy
         path: verdaccio-storage-proxy
-
     - name: Checkout verdaccio-redis-storage
       uses: actions/checkout@v2
       with:
         repository: openupm/verdaccio-redis-storage
         path: verdaccio-redis-storage
-
     - name: Checkout verdaccio-redis-search-patch
       uses: actions/checkout@v2
       with:
         repository: openupm/verdaccio-redis-search-patch
         path: verdaccio-redis-search-patch
-
     - name: Checkout verdaccio-install-counts
       uses: actions/checkout@v2
       with:
         repository: openupm/verdaccio-install-counts
         path: verdaccio-install-counts
-
+    # Install verdaccio and plugins
     - name: Install npm libs
       run: |
         npm install
-
     - name: Build verdaccio
       run: ./build-all.sh
-
+    # Run tests
     - name: Run tests
       run: ./run-tests.sh
