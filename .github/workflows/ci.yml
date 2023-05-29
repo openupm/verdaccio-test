@@ -9,19 +9,19 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     # Install Node.js
-    - name: Install Node.js
+    - name: Node | Install Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '14.x'
     # Build RedisSearch
-    - name: Checkout RedisSearch
+    - name: RedisSearch | Checkout RedisSearch
       uses: actions/checkout@v2
       with:
         repository: RediSearch/RediSearch
         ref: v2.4.15
         path: RediSearch
         submodules: recursive
-    - name: Cleans and resets the git repo and its submodules
+    - name: RedisSearch | Cleans and resets the git repo and its submodules
       run: |
         cd RediSearch
         git clean -xfd
@@ -29,68 +29,71 @@ jobs:
         git reset --hard
         git submodule foreach --recursive git reset --hard
         git submodule update --init --recursive
-    - name: Setup
+    - name: RedisSearch | Setup
       run: |
         cd RediSearch
         make setup
-    - name: Build
+    - name: RedisSearch | Build
       run: |
         cd RediSearch
         make build
-    - name: Create redis modules dir
+    - name: RedisSearch | Create redis modules dir
       run: |
         sudo mkdir -p /usr/lib/redis/modules/
         sudo chown root:root /usr/lib/redis/modules/
-    - name: Copy to redis modules dir
+    - name: RedisSearch | Copy to redis modules dir
       run: |
         sudo cp RediSearch/bin/linux-x64-release/search/redisearch.so /usr/lib/redis/modules/redisearch.so
         sudo chmod 755 /usr/lib/redis/modules/redisearch.so
         sudo chown root:root /usr/lib/redis/modules/redisearch.so
     # Build Bats
-    - name: Install Bats
+    - name: Bats | Checkout Bats
+      uses: actions/checkout@v2
+      with:
+        repository: bats-core/bats-core
+        path: bats-core
+    - name: Bats | Install Bats
       run: |
-        sudo git clone https://github.com/bats-core/bats-core.git bats-core
         cd bats-core
         sudo ./install.sh /usr/local
     # Build MinIO
-    - name: Install MinIO
+    - name: MinIO | Install MinIO
       run: |
         wget https://dl.min.io/server/minio/release/linux-amd64/minio
         chmod +x minio
         sudo mv minio /usr/local/bin/
     # Build verdaccio and plugins
-    - name: Checkout repositories
+    - name: Verdaccio | Checkout repositories
       uses: actions/checkout@v2
       with:
         repository: favoyang/verdaccio
         ref: openupm
         path: verdaccio
-    - name: Checkout verdaccio-storage-proxy
+    - name: Verdaccio | Checkout verdaccio-storage-proxy
       uses: actions/checkout@v2
       with:
         repository: openupm/verdaccio-storage-proxy
         path: verdaccio-storage-proxy
-    - name: Checkout verdaccio-redis-storage
+    - name: Verdaccio | Checkout verdaccio-redis-storage
       uses: actions/checkout@v2
       with:
         repository: openupm/verdaccio-redis-storage
         path: verdaccio-redis-storage
-    - name: Checkout verdaccio-redis-search-patch
+    - name: Verdaccio | Checkout verdaccio-redis-search-patch
       uses: actions/checkout@v2
       with:
         repository: openupm/verdaccio-redis-search-patch
         path: verdaccio-redis-search-patch
-    - name: Checkout verdaccio-install-counts
+    - name: Verdaccio | Checkout verdaccio-install-counts
       uses: actions/checkout@v2
       with:
         repository: openupm/verdaccio-install-counts
         path: verdaccio-install-counts
-    # Install verdaccio and plugins
-    - name: Install npm libs
+    - name: Verdaccio | Install npm libs
       run: |
         npm install
-    - name: Build verdaccio
+    - name: Verdaccio | Build verdaccio
       run: ./build-all.sh
     # Run tests
-    - name: Run tests
+    - name: Tests | Run tests
       run: ./run-tests.sh
