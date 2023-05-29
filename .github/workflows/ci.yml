@@ -23,7 +23,7 @@ jobs:
         submodules: recursive
     - name: Cleans and resets the git repo and its submodules
       run: |
-        cd ~/RediSearch
+        cd RediSearch
         git clean -xfd
         git submodule foreach --recursive git clean -xfd
         git reset --hard
@@ -31,11 +31,11 @@ jobs:
         git submodule update --init --recursive
     - name: Setup
       run: |
-        cd ~/RediSearch
+        cd RediSearch
         make setup
     - name: Build
       run: |
-        cd ~/RediSearch
+        cd RediSearch
         make build
     - name: Create redis modules dir
       run: |
@@ -43,7 +43,7 @@ jobs:
         sudo chown root:root /usr/lib/redis/modules/
     - name: Copy to redis modules dir
       run: |
-        sudo cp ~/RediSearch/bin/linux-x64-release/search/redisearch.so /usr/lib/redis/modules/redisearch.so
+        sudo cp RediSearch/bin/linux-x64-release/search/redisearch.so /usr/lib/redis/modules/redisearch.so
         sudo chmod 755 /usr/lib/redis/modules/redisearch.so
         sudo chown root:root /usr/lib/redis/modules/redisearch.so
     # Build Bats
