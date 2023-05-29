@@ -35,7 +35,8 @@ echo "minio-data"
 ls -al minio-data
 
 echo -n "# start minio..."
-MINIO_REGION=us-east-1 MINIO_ACCESS_KEY=admin MINIO_SECRET_KEY=password minio server minio-data > "$MINIO_LOG" 2>&1 &
+# MINIO_REGION=us-east-1 MINIO_ACCESS_KEY=admin MINIO_SECRET_KEY=password minio server minio-data > "$MINIO_LOG" 2>&1 &
+MINIO_REGION=us-east-1 MINIO_ACCESS_KEY=admin MINIO_SECRET_KEY=password minio server minio-data
 wait_file "$MINIO_LOG" 5 || {
   echo "Minio log file missing after waiting for $? secs: $MINIO_LOG"
   exit 1
