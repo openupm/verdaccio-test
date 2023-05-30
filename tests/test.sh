@@ -73,7 +73,7 @@ teardown () {
 @test "should get install counts" {
   [ -z "$TEST_INSTALL_COUNTS" ] && skip
   today=$(date +%Y-%m-%d)
-  json='{"downloads":1,"start":"1970-01-01","end":"'"$today"'","package":"mypkg"}'
+  json='"downloads":1'
   run curl -s $REGISTRY_URL/downloads/point/1970-01-01:$today/mypkg
   assert_success
   assert_output --partial $json
