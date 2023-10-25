@@ -1,10 +1,9 @@
 #!/bin/bash
 set -e
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 function divider() {
-  printf %"$(tput cols)"s |tr " " "$1"
+  printf %"$(tput cols)"s | tr " " "$1"
   printf "\n"
 }
 
@@ -17,11 +16,11 @@ function run_pass() {
   yarn --version
 
   echo "[$1] clean redis..."
-  redis-cli KEYS "ve:*" | xargs redis-cli DEL > /dev/null 2>&1 || true
-  echo "TS.QUERYINDEX category=tspkghit:daily" | redis-cli | cut -d" " -f2 | sed 's/^/DEL /' | redis-cli > /dev/null 2>&1 || true
-  echo "DEL zpkghit:alltime" | redis-cli > /dev/null 2>&1 || true
-  echo "DEL zpkghit:lastmonth" | redis-cli > /dev/null 2>&1 || true
-  echo "SCAN 0 MATCH pkghit:ver:* COUNT 1000000" | redis-cli | cut -d" " -f2 | sed 's/^/DEL /' | redis-cli > /dev/null 2>&1 || true
+  redis-cli KEYS "ve:*" | xargs redis-cli DEL >/dev/null 2>&1 || true
+  echo "TS.QUERYINDEX category=tspkghit:daily" | redis-cli | cut -d" " -f2 | sed 's/^/DEL /' | redis-cli >/dev/null 2>&1 || true
+  echo "DEL zpkghit:alltime" | redis-cli >/dev/null 2>&1 || true
+  echo "DEL zpkghit:lastmonth" | redis-cli >/dev/null 2>&1 || true
+  echo "SCAN 0 MATCH pkghit:ver:* COUNT 1000000" | redis-cli | cut -d" " -f2 | sed 's/^/DEL /' | redis-cli >/dev/null 2>&1 || true
 
   echo "# clean minio-data..."
   rm -rf "$DIR/minio-data/"
@@ -55,9 +54,8 @@ declare -a arr=(
   "config-proxy-s3-redis-search.yaml"
   "config-proxy-s3-redis-redirect.yaml"
   "config-proxy-s3-redis-install-counts.yaml"
-  )
-for conf in "${arr[@]}"
-do
+)
+for conf in "${arr[@]}"; do
   export VERDACCIO_CONFIG="$conf"
   # toggle TEST_TARBALL_REDIRECT flag based on config name
   if [[ "$VERDACCIO_CONFIG" == *"redirect"* ]]; then
@@ -79,11 +77,10 @@ do
   fi
   run_pass "$VERDACCIO_CONFIG"
   if [ $? -ne 0 ]; then
-    exit 1;
+    exit 1
   fi
 done
 unset "VERDACCIO_CONFIG" || true
 unset "TEST_TARBALL_REDIRECT" || true
 unset "TEST_SEARCH_ENDPOINT" || true
 unset "TEST_INSTALL_COUNTS" || true
-
