@@ -12,7 +12,7 @@ jobs:
     - name: Node | Install Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14.x'
+        node-version: '16.x'
     # Install Go
     - name: Go | Install Go
       uses: actions/setup-go@v2
