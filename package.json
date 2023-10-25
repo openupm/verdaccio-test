@@ -18,5 +18,6 @@
   },
   "dependencies": {
     "npm-cli-login": "^1.0.0"
-  }
+  },
+  "packageManager": "yarn@2.4.1"
 }

@@ -1,13 +1,13 @@
 #!/bin/bash
 set -e
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 function divider() {
-    printf %"$(tput cols)"s |tr " " "-"
+    printf %"$(tput cols)"s | tr " " "-"
     printf "\n"
 }
 
 echo "# set yarn version..."
-yarn set version 1.22.19
+yarn set version 2.4.1
 divider
 
 # Run nvm only in local
