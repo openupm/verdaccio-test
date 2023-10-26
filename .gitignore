@@ -123,3 +123,4 @@ server/storage
 
 .yarn/
 .yarnrc
+.yarnrc.yml
